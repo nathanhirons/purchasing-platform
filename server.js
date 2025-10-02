@@ -58,6 +58,16 @@ app.use(express.static(__dirname));
 // Serve uploaded files (with authentication check)
 app.use('/uploads', requireAuthMiddleware, express.static('uploads'));
 
+// Health check route for Railway
+app.get('/health', function(req, res) {
+    res.status(200).send('OK');
+});
+
+// Root route - serve index.html
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 const db = new sqlite3.Database('./requisitions.db');
 
 db.serialize(function() {
