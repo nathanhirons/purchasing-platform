@@ -54,7 +54,7 @@ app.use(session({
 }));
 
 // Serve static files from public directory, not root
-app.use(express.static('public'));
+app.use(express.static(__dirname));
 // Serve uploaded files (with authentication check)
 app.use('/uploads', requireAuthMiddleware, express.static('uploads'));
 
