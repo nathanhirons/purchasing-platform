@@ -1,7 +1,7 @@
 {
-  "name": "purchasing-platform",
+  "name": "precision-sfx-purchasing-platform",
   "version": "1.0.0",
-  "description": "Purchasing System",
+  "description": "precision-sfx-Purchasing System",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
