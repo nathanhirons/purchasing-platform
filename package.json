@@ -1,5 +1,5 @@
 {
-  "name": "Precision SFX purchasing-platform",
+  "name": "purchasing-platform",
   "version": "1.0.0",
   "description": "Precision SFX Purchasing System",
   "main": "server.js",
