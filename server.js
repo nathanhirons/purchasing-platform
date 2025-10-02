@@ -1002,7 +1002,7 @@ app.post('/api/users/invite', requireAuth, requireRole('admin'), function(req, r
 });
 
 app.listen(PORT, '0.0.0.0', function() {
-    console.log('Server running on http://localhost:3000');
+    console.log('Server running on http://0.0.0.0:' + PORT);
     console.log('Accounts: poo/poo, Rconder/SFXteam2025!, Nhirons/SFXteam2025!');
 });
 
