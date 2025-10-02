@@ -1,7 +1,7 @@
 {
   "name": "purchasing-platform",
   "version": "1.0.0",
-  "description": "Precision SFX Purchasing System",
+  "description": "Purchasing System",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
