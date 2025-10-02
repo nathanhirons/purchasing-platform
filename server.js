@@ -739,14 +739,6 @@ app.delete('/api/suppliers/:id', requireAuth, requireRole('admin', 'approver'), 
     });
 });
 
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-app.get('/app.js', function(req, res) {
-    res.sendFile(path.join(__dirname, 'app.js'));
-});
-
 // Export requisitions to Excel
 app.get('/api/export/requisitions', requireAuth, function(req, res) {
     const xlsx = require('xlsx');
