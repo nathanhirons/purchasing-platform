@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precision SFX Purchasing System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            margin-bottom: 10px;
+        }
+        
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-tab {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-tab:hover {
+            background: #f0f0f0;
+        }
+        
+        .nav-tab.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #229954;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #d68910;
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .requisition-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .requisition-item.approved-full {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+        
+        .requisition-item h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .requisition-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .requisition-details div {
+            font-size: 14px;
+        }
+        
+        .requisition-details strong {
+            display: block;
+            color: #7f8c8d;
+            font-size: 12px;
+        }
+        
+        .requisition-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .search-filter {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .search-filter input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .status-draft {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .status-pending {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .status-approved {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .status-purchased {
+            background: #3498db;
+            color: white;
+        }
+        
+        .status-delivered {
+            background: #8e44ad;
+            color: white;
+        }
+        
+        .approval-info {
+            margin-top: 10px;
+            padding: 10px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        
+        .approval-info .checkmark {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        table th,
+        table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        table tr:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginScreen" class="container">
+        <div class="card" style="max-width: 400px; margin: 100px auto;">
+            <h2 style="margin-bottom: 20px;">Precision SFX Purchasing System</h2>
+            <h3 style="margin-bottom: 20px;">Login</h3>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="username">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password">
+            </div>
+            <button class="btn btn-primary" onclick="doLogin()">Login</button>
+        </div>
+    </div>
+    
+    <div id="mainApp" class="hidden">
+        <div class="header">
+            <div class="user-info">
+                <div>
+                    <h1>Precision SFX Purchasing System</h1>
+                    <p id="welcomeMsg"></p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-success" onclick="exportToExcel()">📊 Export to Excel</button>
+                    <button class="btn btn-danger" onclick="doLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="nav-tabs">
+                <div class="nav-tab active" onclick="showTab('draft', this)">All Requisitions</div>
+                <div class="nav-tab" onclick="showTab('pending', this)">Pending Approval</div>
+                <div class="nav-tab" onclick="showTab('approved', this)">Approved</div>
+                <div class="nav-tab" onclick="showTab('purchased', this)">Purchased</div>
+                <div class="nav-tab" onclick="showTab('delivered', this)">Delivered</div>
+                <div class="nav-tab" onclick="showTab('create', this)">Create New</div>
+                <div class="nav-tab" id="suppliersTab" onclick="showTab('suppliers', this)">Suppliers</div>
+                <div class="nav-tab hidden" id="usersTab" onclick="showTab('users', this)">Users</div>
+            </div>
+            
+            <div id="draft" class="tab-content active">
+                <div class="search-filter">
+                    <input type="text" id="searchDraft" placeholder="Search by title, supplier, item, PO number, budget code..." onkeyup="searchRequisitions('draft')">
+                </div>
+                <div id="draftList"></div>
+            </div>
+            
+            <div id="pending" class="tab-content">
+                <div class="search-filter">
+                    <input type="text" id="searchPending" placeholder="Search by title, supplier, item, PO number, budget code..." onkeyup="searchRequisitions('pending')">
+                </div>
+                <div id="pendingList"></div>
+            </div>
+            
+            <div id="approved" class="tab-content">
+                <div class="search-filter">
+                    <input type="text" id="searchApproved" placeholder="Search by title, supplier, item, PO number, budget code..." onkeyup="searchRequisitions('approved')">
+                </div>
+                <div id="approvedList"></div>
+            </div>
+            
+            <div id="purchased" class="tab-content">
+                <div class="search-filter">
+                    <input type="text" id="searchPurchased" placeholder="Search by title, supplier, item, PO number, budget code..." onkeyup="searchRequisitions('purchased')">
+                </div>
+                <div id="purchasedList"></div>
+            </div>
+            
+            <div id="delivered" class="tab-content">
+                <div class="search-filter">
+                    <input type="text" id="searchDelivered" placeholder="Search by title, supplier, item, PO number, budget code..." onkeyup="searchRequisitions('delivered')">
+                </div>
+                <div id="deliveredList"></div>
+            </div>
+            
+            <div id="create" class="tab-content">
+                <div class="card">
+                    <h2 id="formTitle">Create Requisition</h2>
+                    <form id="requisitionForm" onsubmit="return false;">
+                        <div class="form-group">
+                            <label>Title *</label>
+                            <input type="text" id="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Justification</label>
+                            <textarea id="justification"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Urgency</label>
+                            <select id="urgency">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Requested Delivery Date</label>
+                            <input type="date" id="requestedDeliveryDate">
+                        </div>
+                        <div id="expectedDeliveryField" class="form-group" style="background: #f0f8ff; padding: 10px; border-radius: 5px; display: none;">
+                            <label style="color: #2c3e50; font-weight: bold;">Expected Delivery Date (Set by Admin/Approver)</label>
+                            <input type="date" id="expectedDeliveryDate">
+                            <small style="color: #7f8c8d;">This date will be visible to all users</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Supplier</label>
+                            <select id="supplierId">
+                                <option value="">Select Supplier</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Manual Supplier Entry (if not in dropdown above)</label>
+                            <input type="text" id="manualSupplier" placeholder="Enter supplier name if not in list">
+                            <small style="color: #7f8c8d;">Use this field if your supplier is not in the dropdown list</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Rig Allocation</label>
+                            <input type="text" id="rigAllocation" placeholder="Enter rig allocation">
+                        </div>
+                        <div class="form-group">
+                            <label>Links (URLs)</label>
+                            <input type="text" id="links">
+                        </div>
+                        <div class="form-group">
+                            <label>Attachments</label>
+                            <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.gif,.txt,.zip,.rar" style="display: none;">
+                            <button type="button" class="btn btn-primary btn-small" onclick="document.getElementById('fileInput').click()">Choose Files</button>
+                            <span id="fileCount" style="margin-left: 10px;"></span>
+                            <div id="fileList" style="margin-top: 10px;"></div>
+                            <div id="existingFiles" style="margin-top: 10px;"></div>
+                        </div>
+                        <div id="adminFields" class="hidden">
+                            <div class="form-group">
+                                <label>Budget Code</label>
+                                <input type="text" id="budgetCode">
+                            </div>
+                            <div class="form-group">
+                                <label>PO Number</label>
+                                <input type="text" id="poNumber">
+                            </div>
+                            <div class="form-group">
+                                <label>Envelope Number</label>
+                                <input type="text" id="envelopeNumber">
+                            </div>
+                            <div class="form-group" style="background: #fff3e0; padding: 15px; border-radius: 5px; margin-top: 20px;">
+                                <h4 style="margin-top: 0; color: #e65100;">Cost Breakdown (Admin/Approver Only)</h4>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                    <div>
+                                        <label>Net Cost (£)</label>
+                                        <input type="number" id="netCost" step="0.01" placeholder="0.00" onchange="calculateVATAndGross()">
+                                    </div>
+                                    <div>
+                                        <label>VAT Rate (%)</label>
+                                        <input type="number" id="vatRate" step="0.01" value="20" onchange="calculateVATAndGross()">
+                                    </div>
+                                    <div>
+                                        <label>VAT Amount (£)</label>
+                                        <input type="number" id="vatAmount" step="0.01" placeholder="0.00" readonly style="background: #f5f5f5;">
+                                    </div>
+                                    <div>
+                                        <label>Gross Cost (£)</label>
+                                        <input type="number" id="grossCost" step="0.01" placeholder="0.00" readonly style="background: #f5f5f5;">
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-small" style="margin-top: 10px;" onclick="calculateFromGross()">Calculate from Gross Amount</button>
+                                <small style="color: #7f8c8d; display: block; margin-top: 5px;">Enter Net Cost to auto-calculate VAT and Gross, or use button above to work backwards from Gross</small>
+                            </div>
+                        </div>
+                        <h3 style="margin: 20px 0 10px 0;">Items</h3>
+                        <div id="itemsList"></div>
+                        <button type="button" class="btn btn-success btn-small" onclick="addItem()">+ Add Item</button>
+                        <div style="margin-top: 20px;">
+                            <button type="button" class="btn btn-primary" onclick="saveRequisition('draft')">Save as Draft</button>
+                            <button type="button" class="btn btn-success" onclick="saveRequisition('pending')">Submit for Approval</button>
+                            <button type="button" id="cancelEdit" class="btn btn-danger hidden" onclick="cancelEdit()">Cancel Edit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div id="suppliers" class="tab-content">
+                <div class="card">
+                    <h2>Add Supplier</h2>
+                    <form id="supplierForm">
+                        <div class="form-group">
+                            <label>Supplier Name *</label>
+                            <input type="text" id="supplierName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Person</label>
+                            <input type="text" id="contactPerson">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="supplierEmail">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Supplier</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <h2>Suppliers List</h2>
+                    <div id="suppliersList"></div>
+                </div>
+            </div>
+            
+            <div id="users" class="tab-content">
+                <div class="card">
+                    <h2>Invite User</h2>
+                    <form id="inviteForm">
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="inviteEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Role *</label>
+                            <select id="inviteRole" required>
+                                <option value="requester">Requester</option>
+                                <option value="approver">Approver</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Generate Invite Link</button>
+                    </form>
+                    <div style="margin-top: 20px;">
+                        <h3>Or Add User Directly</h3>
+                        <button type="button" class="btn btn-success" onclick="addUser()">Add New User</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>Users List</h2>
+                    <div id="usersList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+    <script>
+        function calculateVATAndGross() {
+            var netCost = parseFloat(document.getElementById('netCost').value) || 0;
+            var vatRate = parseFloat(document.getElementById('vatRate').value) || 20;
+            
+            if (netCost > 0) {
+                var vatAmount = netCost * (vatRate / 100);
+                var grossCost = netCost + vatAmount;
+                
+                document.getElementById('vatAmount').value = vatAmount.toFixed(2);
+                document.getElementById('grossCost').value = grossCost.toFixed(2);
+            }
+        }
+        
+        function calculateFromGross() {
+            var grossInput = prompt('Enter the Gross amount (£):');
+            if (grossInput) {
+                var grossCost = parseFloat(grossInput);
+                var vatRate = parseFloat(document.getElementById('vatRate').value) || 20;
+                
+                if (grossCost > 0) {
+                    var netCost = grossCost / (1 + vatRate / 100);
+                    var vatAmount = grossCost - netCost;
+                    
+                    document.getElementById('netCost').value = netCost.toFixed(2);
+                    document.getElementById('vatAmount').value = vatAmount.toFixed(2);
+                    document.getElementById('grossCost').value = grossCost.toFixed(2);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
